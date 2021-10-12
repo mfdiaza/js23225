@@ -72,9 +72,17 @@ function cotizarAuto() {
     // // Consulto por el año de adquisicion
     let year = parseInt(prompt("Ingrese el año en que adquirió el producto"));
 
+    if (isNaN(year)) {
+        alert("Debe ingresar el año");
+    }
+
     // // Calculo cuantos años pasaron desde que lo compro
     let difftime = new Date().getFullYear() - year;
 
+    if (difftime >= 15){
+        alert("El vehiculo es demasiado antiguo y no se puede cotizar");
+    }
+    else {
     // Descuento 5% por año de antigüedad
     dtoAuto = aplicaDto(precioAuto, difftime, 5)
     
@@ -82,7 +90,7 @@ function cotizarAuto() {
 
     // Agrego la cotizacion al array
     cotizacion.push(new Auto(year, difftime, newPrizeCar));
-    
+    }
     
     // const COTIZO = new Auto(year, difftime, newPrizeCar);
     // COTIZO.mostrarAuto();
@@ -106,6 +114,10 @@ function cotizarTV() {
     // // Calculo cuantos años pasaron desde que lo compro
     let difftime = new Date().getFullYear() - year;
 
+    if (difftime >= 5){
+        alert("El producto es demasiado antiguo y no se puede cotizar");
+    }
+    else {
     // Descuento 1% por año de antigüedad
     dto = aplicaDto(precioTV, difftime, 1)
 
@@ -116,13 +128,12 @@ function cotizarTV() {
     if (VALIDACION) {
        
         cotizacion.push(new Oro(year, size, newPrize));
-        // const COTIZO = new Tele(year, size, newPrize);
-        // COTIZO.mostrarTV();
     }
 
     else {
         alert("Debe ingresar una opcion valida")
     }
+}
     
 }
 
@@ -147,12 +158,10 @@ function cotizarOro() {
     else {
     
         cotizacion.push(new Tele(year, kilates, precioOro));
-        // const COTIZO = new Oro(year, kilates, precioOro);
-        // COTIZO.mostrarGold();
-
-    // console.log(precioOro)   
     }
 }
+
+
 
 function validaInputTV(year, size){
 
