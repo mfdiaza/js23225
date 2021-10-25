@@ -59,20 +59,49 @@ class makeWeb {
     pantalla.appendChild(itemAMostrar);
   }
 
-//   contruyeHistoria() {
-//       const webHistoria = document.getElementById("historia")
-//       let historiaPantalla = document.createElement("table")
-//       for (const item of cotizacion) {
-//           historiaPantalla.innerHTML =`
-//           <p> ${item.tipo} </p>
-//           <p> ${item.anio} </p>
-//           <p> ${item.precio} </p>
-//           `
-//         webHistoria.appendChild(historiaPantalla);
-//     }
-//   }
+  contruyeHistoria() {
+      const webHistoria = document.getElementById("historia")
+      let historiaPantalla = document.createElement("table")
+      for (const item of cotizacion) {
+          historiaPantalla.innerHTML =`
+          <p> ${item.tipo} </p>
+          <p> ${item.anio} </p>
+          <p> ${item.precio} </p>
+          `
+        webHistoria.appendChild(historiaPantalla);
+    }
+  }
 }
 // Aca comienzan las funciones
+function crearTabla(){
+        // Elimino cualquier resultado anterior
+        const datosViejos = document.querySelector("#historia table")
+        if (datosViejos != null) {
+            datosViejos.remove();
+        }
+
+    let headers = ['Producto', 'Año de compra', 'Monto a pagar'];
+    let table = document.createElement('table');
+    let headerRow = document.createElement('tr');
+    headers.forEach(headerText => {
+        let header = document.createElement('th');
+        let textNode = document.createTextNode(headerText);
+        header.appendChild(textNode);
+        headerRow.appendChild(header);
+    });
+    table.appendChild(headerRow);
+    cotizacion.forEach(emp => {
+        let row = document.createElement('tr');
+        Object.values(emp).forEach(text => {
+            let cell = document.createElement('td');
+            let textNode = document.createTextNode(text);
+            cell.appendChild(textNode);
+            row.appendChild(cell);
+        })
+        table.appendChild(row);
+    });
+    tabla.appendChild(table);
+};
 
 function aplicaBono(precio, time, bono) {
   precio = precio + (time * bono * precio) / 100;
@@ -118,7 +147,11 @@ formulario.addEventListener("submit", (e) => {
   // Inicializo y armo la web
   const web = new makeWeb();
   web.construyeWeb(textoElegido, anioElegido, precio);
-}
-// const historia = new makeWeb();
-// historia.contruyeHistoria();
-});
+    }
+})
+
+let botonHistory = document.getElementById("history");
+let tabla = document.getElementById("historia");
+
+botonHistory.addEventListener("click", crearTabla);
+
