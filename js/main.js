@@ -148,6 +148,8 @@ formulario.addEventListener("submit", (e) => {
   const web = new makeWeb();
   web.construyeWeb(textoElegido, anioElegido, precio);
     }
+  // Reinicio el formulario y lo dejo listo para seleccionar otro valor
+    formulario.reset();
 })
 
 let botonHistory = document.getElementById("history");
