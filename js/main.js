@@ -2,228 +2,123 @@
 
 // Inicializo array de cotizaciones
 const cotizacion = [];
+let currentYear = new Date().getFullYear()
 
-// Defino la clase Auto
+// Defino la clase cotizar
 
-class Auto {
-    constructor (year, oldAuto, precioBase) {
-        this.year = year;
-        this.oldAuto = oldAuto;
-        this.precioBase = precioBase;
+class Cotizar {
+  constructor(tipo, age) {
+    this.tipo = tipo;
+    this.age = age;
+  }
+
+  cotizaTipo() {
+    let newPrize;
+    let precioBaseOro = 50000;
+    let precioBaseAuto = 236000;
+    let dtoTV = 0;
+    let old = new Date().getFullYear() - this.age;
+
+    switch (this.tipo) {
+      case "1":
+        dtoTV = aplicaDto(precioBaseAuto, old, 5); // Descuento 5% por año de antigüedad
+        newPrize = precioBaseAuto - dtoTV;
+        break;
+      case "2":
+        newPrize = aplicaBono(precioBaseOro, old, 1); // Sumo 1% por año de antigüedad
+        break;
     }
-
-    mostrarAuto() {
-        document.write("<ul>")
-        document.write(`<li>Año de compra: ${this.year} </li>`);
-        document.write(`<li>Antigüedad calculada: ${this.oldAuto} </li>`);
-        document.write(`<li>Precio a pagar (con los dtos.): ${this.precioBase} </li>`);
-        document.write("</ul>")
-    }
-
+    return newPrize;
+  }
 }
 
-// Defino la clase Tele
-
-class Tele {
-    constructor (year, pulgadas, precioBase) {
-        this.year = year;
-        this.pulgadas = pulgadas;
-        this.precioBase = precioBase;
-    }
-
-    mostrarTV() {
-        document.write("<ul>")
-        document.write(`<li>Año de compra: ${this.year} </li>`);
-        document.write(`<li>Pulgadas: ${this.pulgadas} </li>`);
-        document.write(`<li>Precio a pagar: ${this.precioBase} </li>`);
-        document.write("</ul>")
-    }
-
+class Table {
+  constructor(tipo, anio, precio) {
+    this.tipo = tipo;
+    this.anio = anio;
+    this.precio = precio;
+  }
 }
 
-// Defino la clase Oro
+class makeWeb {
+  constructor(tipo, anio, monto) {
+    this.tipo = tipo;
+    this.anio = anio;
+    this.monto = monto;
+  }
 
-class Oro {
-    constructor (year, kilates, precioBase) {
-        this.year = year;
-        this.kilates = kilates;
-        this.precioBase = precioBase;
-    }
+  construyeWeb(tipo, anio, monto) {
+    const pantalla = document.getElementById("items");
+    let itemAMostrar = document.createElement("div");
+    itemAMostrar.classList.add("list-group-item", "text-right", "mx-2");
+    itemAMostrar.innerHTML = `            
+                <li> Objeto: ${tipo} </li>
+                <li> Año de compra: ${anio} </li>
+                <li> Monto a pagar: ${monto} </li>
+            `;
+    pantalla.appendChild(itemAMostrar);
+  }
 
-    mostrarGold() {
-        document.write("<ul>")
-        document.write(`<li>Año de compra: ${this.year} </li>`);
-        document.write(`<li>Kilates: ${this.kilates} </li>`);
-        document.write(`<li>Precio a pagar: ${this.precioBase} </li>`);
-        document.write("</ul>")
-    }
-
+//   contruyeHistoria() {
+//       const webHistoria = document.getElementById("historia")
+//       let historiaPantalla = document.createElement("table")
+//       for (const item of cotizacion) {
+//           historiaPantalla.innerHTML =`
+//           <p> ${item.tipo} </p>
+//           <p> ${item.anio} </p>
+//           <p> ${item.precio} </p>
+//           `
+//         webHistoria.appendChild(historiaPantalla);
+//     }
+//   }
 }
-
-
 // Aca comienzan las funciones
 
-
-function cotizarAuto() {
-    // Declaro un precio base para el producto
-    let precioAuto = 500000;
-    let dtoAuto = 0;
-    
-    // // Consulto por el año de adquisicion
-    let year = parseInt(prompt("Ingrese el año en que adquirió el producto"));
-
-    if (isNaN(year)) {
-        alert("Debe ingresar el año");
-    }
-
-    // // Calculo cuantos años pasaron desde que lo compro
-    let difftime = new Date().getFullYear() - year;
-
-    if (difftime >= 15){
-        alert("El vehiculo es demasiado antiguo y no se puede cotizar");
-    }
-    else {
-    // Descuento 5% por año de antigüedad
-    dtoAuto = aplicaDto(precioAuto, difftime, 5)
-    
-    let newPrizeCar = precioAuto - dtoAuto;
-
-    // Agrego la cotizacion al array
-    cotizacion.push(new Auto(year, difftime, newPrizeCar));
-    }
-    
-    // const COTIZO = new Auto(year, difftime, newPrizeCar);
-    // COTIZO.mostrarAuto();
-
+function aplicaBono(precio, time, bono) {
+  precio = precio + (time * bono * precio) / 100;
+  return precio;
 }
 
-function cotizarTV() {
-    // Declaro un precio base para el producto
-    let precioTV = 60000; 
-    let bono = 0;
-    let dto = 0;
- // Consulto por el año de adquisicion y las pulgadas que tiene el televisor
-    let year = parseInt(prompt("Ingrese el año en que adquirió el producto"));
-    let size = parseInt(prompt("Cuantas pulgadas tiene el televisor?"));
-
-    // Si el TV es mayor a 55 pulgadas, entonces le otorgo un bono del 15%
-    if (size >= 55) {
-        bono = aplicaBono(precioTV);
-    }
-
-    // // Calculo cuantos años pasaron desde que lo compro
-    let difftime = new Date().getFullYear() - year;
-
-    if (difftime >= 5){
-        alert("El producto es demasiado antiguo y no se puede cotizar");
-    }
-    else {
-    // Descuento 1% por año de antigüedad
-    dto = aplicaDto(precioTV, difftime, 1)
-
-    let newPrize = precioTV + bono - dto
-
-    let VALIDACION = validaInputTV(year, size);
-
-    if (VALIDACION) {
-       
-        cotizacion.push(new Oro(year, size, newPrize));
-    }
-
-    else {
-        alert("Debe ingresar una opcion valida")
-    }
-}
-    
+function aplicaDto(precio, time, dto) {
+  precio = (time * dto * precio) / 100;
+  return precio;
 }
 
-function cotizarOro() {
-    // Declaro un precio base para el producto
-    let precioOro = 2125300; 
+// parso del formulario
+const formulario = document.getElementById("formularioCotiza");
 
-    // // Consulto por el año de adquisicion y las pulgadas que tiene el televisor
-    let year = parseInt(prompt("Ingrese el año en que adquirió el producto"));
-    let kilates = parseInt(prompt("Cuantos kilates tiene la joya?"));
+formulario.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-   // Calculo cuantos años pasaron desde que lo compro
-    let difftime = new Date().getFullYear() - year;
+  //Leo el producto a cotizar del <select>
+  const tipo = document.getElementById("inputTipo");
+  const tipoElegido = tipo.options[tipo.selectedIndex].value;
+  const textoElegido = tipo.options[tipo.selectedIndex].text;
 
-    // Sumo 3% por año de antigüedad
-    precioOro += ((difftime * 3) * precioOro) / 100;
+  //Leo el año del <input>
+  const inputAnio = document.getElementById("inputAnio");
+  const anioElegido = inputAnio.value;
 
-    // Si es menos de 18 kilates, no lo quiero
-     if (kilates < 18) {
-        alert("Lo siento, pero no me sirve tu mercancia")
-    }
-    else {
-    
-        cotizacion.push(new Tele(year, kilates, precioOro));
-    }
+  // Algunas validaciones
+    if (anioElegido === '' || anioElegido > currentYear) {
+        alert("Año vacio o invalido")
+    } else {
+    // Elimino cualquier resultado anterior
+        const datosViejos = document.querySelector("#items div")
+        if (datosViejos != null) {
+            datosViejos.remove();
+        }
+  // Instanciamos la cotizacion
+  const agregoCotizacion = new Cotizar(tipoElegido, anioElegido);
+  const precio = agregoCotizacion.cotizaTipo();
+
+  // Armo el contenido de la tabla y lo subo al array
+  cotizacion.push(new Table(textoElegido, anioElegido, precio));
+
+  // Inicializo y armo la web
+  const web = new makeWeb();
+  web.construyeWeb(textoElegido, anioElegido, precio);
 }
-
-
-
-function validaInputTV(year, size){
-
-    let valido = false;
-
-    if (!isNaN(year) && !isNaN(size)) {
-        valido = true;
-    }
-    return valido;
-}
-
-function aplicaBono(precio){
-    precio = precio * 15/100
-    return precio;
-}
-
-
-function aplicaDto(precio, time ,dto){
-    precio = ((time * dto) * precio) / 100;
-    return precio;
-}
-
-function muestraArray() {
-    // Ordeno el array por precio (Mejor pago primero)
-    cotizacion.sort(function(a, b){return b.precioBase - a.precioBase}); 
-    
-    for (const cotiza of cotizacion) {
-    
-        document.write("<ul>")
-        document.write(`<li>Año de compra: ${cotiza.year} </li>`);
-        document.write(`<li>Precio a pagar: ${cotiza.precioBase} </li>`);
-        document.write("</ul>")
-        
-    }
-}
-
-let condicionCorte = 5;
-
-// Solicito al usuario ingresar el tipo de objeto a vender
-
-let opcionCotizar = Number(prompt("Ingrese el tipo de producto a cotizar: 1 - Automovil, 2 - Televisor, 3 - Joyas o, 4 - Mostrar carrito o bien ingrese 5 para salir"));
-
-while (opcionCotizar != 5){
-switch (opcionCotizar) {
-      case 1:
-          cotizarAuto();
-        break;
-      case 2:
-          cotizarTV();
-        break;
-      case 3:
-          cotizarOro();
-        break;
-      case 4:
-          muestraArray();
-        break;
-      case 5:
-          break;
-
-      default:
-          alert("Elija una opcion valida!")
-        break;
-}
-opcionCotizar = Number(prompt("Ingrese el tipo de producto a cotizar: 1 - Automovil, 2 - Televisor, 3 - Joyas o, 4 - Mostrar carrito o bien ingrese 5 para salir"));
-}
+// const historia = new makeWeb();
+// historia.contruyeHistoria();
+});
