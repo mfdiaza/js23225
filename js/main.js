@@ -113,7 +113,7 @@ function aplicaDto(precio, time, dto) {
   return precio;
 }
 
-// parso del formulario
+// parseo del formulario
 const formulario = document.getElementById("formularioCotiza");
 
 formulario.addEventListener("submit", (e) => {
@@ -130,7 +130,11 @@ formulario.addEventListener("submit", (e) => {
 
   // Algunas validaciones
     if (anioElegido === '' || anioElegido > currentYear) {
-        alert("Año vacio o invalido")
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Año vacío o invalido!',
+      })
     } else {
     // Elimino cualquier resultado anterior
         const datosViejos = document.querySelector("#items div")
