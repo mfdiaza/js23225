@@ -4,6 +4,7 @@
 const cotizacion = [];
 let currentYear = new Date().getFullYear()
 
+
 // Defino la clase cotizar
 
 class Cotizar {
@@ -24,6 +25,7 @@ class Cotizar {
         dtoTV = aplicaDto(precioBaseAuto, old, 5); // Descuento 5% por año de antigüedad
         newPrize = precioBaseAuto - dtoTV;
         break;
+
       case "2":
         newPrize = aplicaBono(precioBaseOro, old, 1); // Sumo 1% por año de antigüedad
         break;
@@ -127,6 +129,7 @@ formulario.addEventListener("submit", (e) => {
   //Leo el año del <input>
   const inputAnio = document.getElementById("inputAnio");
   const anioElegido = inputAnio.value;
+  let maxAge = currentYear - anioElegido
 
   // Algunas validaciones
     if (anioElegido === '' || anioElegido > currentYear) {
@@ -135,12 +138,21 @@ formulario.addEventListener("submit", (e) => {
         title: 'Oops...',
         text: 'Año vacío o invalido!',
       })
-    } else {
+    } 
+    else if (tipoElegido == 1 && (maxAge > 20)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Producto demasiado anticuado! (Max. 20 años)',
+      })
+    }
+    else {
     // Elimino cualquier resultado anterior
         const datosViejos = document.querySelector("#items div")
         if (datosViejos != null) {
             datosViejos.remove();
-        }
+    }
+
   // Instanciamos la cotizacion
   const agregoCotizacion = new Cotizar(tipoElegido, anioElegido);
   const precio = agregoCotizacion.cotizaTipo();
