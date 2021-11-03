@@ -146,6 +146,13 @@ formulario.addEventListener("submit", (e) => {
         text: 'Producto demasiado anticuado! (Max. 20 años)',
       })
     }
+    else if (tipoElegido !=1 || tipoElegido !=2){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Debe seleccionar al menos un producto para cotizar',
+      })
+    }
     else {
     // Elimino cualquier resultado anterior
         const datosViejos = document.querySelector("#items div")
