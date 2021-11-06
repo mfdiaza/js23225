@@ -51,6 +51,7 @@ class makeWeb {
 
   construyeWeb(tipo, anio, monto) {
     const pantalla = document.getElementById("items");
+    
     let itemAMostrar = document.createElement("div");
     itemAMostrar.classList.add("list-group-item", "text-right", "mx-2");
     itemAMostrar.innerHTML = `            
@@ -62,15 +63,16 @@ class makeWeb {
   }
 
   contruyeHistoria() {
-      const webHistoria = document.getElementById("historia")
-      let historiaPantalla = document.createElement("table")
+      const webHistoria = $("#historia")
+      
+      let historiaPantalla = document.append("table")
       for (const item of cotizacion) {
           historiaPantalla.innerHTML =`
           <p> ${item.tipo} </p>
           <p> ${item.anio} </p>
           <p> ${item.precio} </p>
           `
-        webHistoria.appendChild(historiaPantalla);
+        webHistoria.append(historiaPantalla);
     }
   }
 }
@@ -102,7 +104,7 @@ function crearTabla(){
         })
         table.appendChild(row);
     });
-    tabla.appendChild(table);
+    tabla.append(table);
 };
 
 function aplicaBono(precio, time, bono) {
@@ -115,6 +117,7 @@ function aplicaDto(precio, time, dto) {
   return precio;
 }
 
+
 // parseo del formulario
 const formulario = document.getElementById("formularioCotiza");
 
@@ -122,13 +125,12 @@ formulario.addEventListener("submit", (e) => {
   e.preventDefault();
 
   //Leo el producto a cotizar del <select>
-  const tipo = document.getElementById("inputTipo");
-  const tipoElegido = tipo.options[tipo.selectedIndex].value;
-  const textoElegido = tipo.options[tipo.selectedIndex].text;
-
+  const tipoElegido = $("#inputTipo").val();
+  const textoElegido = $("#inputTipo option:selected").text();
+  
   //Leo el año del <input>
-  const inputAnio = document.getElementById("inputAnio");
-  const anioElegido = inputAnio.value;
+  const anioElegido = $("#inputAnio").val();
+  
   let maxAge = currentYear - anioElegido
 
   // Algunas validaciones
@@ -146,11 +148,11 @@ formulario.addEventListener("submit", (e) => {
         text: 'Producto demasiado anticuado! (Max. 20 años)',
       })
     }
-    else if (tipoElegido !=1 || tipoElegido !=2){
+    else if (tipoElegido !=1 && tipoElegido !=2){
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debe seleccionar al menos un producto para cotizar',
+        text: 'Debe seleccionar al menos un producto para cotizar.',
       })
     }
     else {
@@ -167,6 +169,10 @@ formulario.addEventListener("submit", (e) => {
   // Armo el contenido de la tabla y lo subo al array
   cotizacion.push(new Table(textoElegido, anioElegido, precio));
 
+  // Cargo el array en localStorage
+  const guardarLocal = (clave, valor) => { localStorage.setItem(clave, valor) };
+  guardarLocal("listaCotizacion", JSON.stringify(cotizacion));
+
   // Inicializo y armo la web
   const web = new makeWeb();
   web.construyeWeb(textoElegido, anioElegido, precio);
@@ -175,8 +181,8 @@ formulario.addEventListener("submit", (e) => {
     formulario.reset();
 })
 
-let botonHistory = document.getElementById("history");
-let tabla = document.getElementById("historia");
+let botonHistory = $("#history");
+let tabla = $("#historia");
 
-botonHistory.addEventListener("click", crearTabla);
+botonHistory.click(crearTabla);
 
