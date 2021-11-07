@@ -60,20 +60,7 @@ class makeWeb {
                 <li> Monto a pagar: ${monto} </li>
             `;
     pantalla.appendChild(itemAMostrar);
-  }
-
-  contruyeHistoria() {
-      const webHistoria = $("#historia")
-      
-      let historiaPantalla = document.append("table")
-      for (const item of cotizacion) {
-          historiaPantalla.innerHTML =`
-          <p> ${item.tipo} </p>
-          <p> ${item.anio} </p>
-          <p> ${item.precio} </p>
-          `
-        webHistoria.append(historiaPantalla);
-    }
+    $("#items").hide().fadeIn(1000).fadeOut(1000).fadeIn(1000);
   }
 }
 // Aca comienzan las funciones
@@ -105,7 +92,8 @@ function crearTabla(){
         table.appendChild(row);
     });
     tabla.append(table);
-};
+    $("#historia").hide().fadeIn(1000).fadeOut(1000).fadeIn(1000);
+}
 
 function aplicaBono(precio, time, bono) {
   precio = precio + (time * bono * precio) / 100;
@@ -185,4 +173,3 @@ let botonHistory = $("#history");
 let tabla = $("#historia");
 
 botonHistory.click(crearTabla);
-
