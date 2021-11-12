@@ -2,8 +2,8 @@
 
 // Inicializo array de cotizaciones
 const cotizacion = [];
-let currentYear = new Date().getFullYear()
-
+let currentYear = new Date().getFullYear();
+let dolarhoy = cotizaDolar();
 
 // Defino la clase cotizar
 
@@ -19,18 +19,24 @@ class Cotizar {
     let precioBaseAuto = 236000;
     let dtoTV = 0;
     let old = new Date().getFullYear() - this.age;
-
+    let precioEnDolares;
+    
     switch (this.tipo) {
       case "1":
         dtoTV = aplicaDto(precioBaseAuto, old, 5); // Descuento 5% por año de antigüedad
         newPrize = precioBaseAuto - dtoTV;
+        precioEnDolares = Math.round(newPrize/dolarhoy)
         break;
 
       case "2":
         newPrize = aplicaBono(precioBaseOro, old, 1); // Sumo 1% por año de antigüedad
+        precioEnDolares = Math.round(newPrize/dolarhoy)
         break;
     }
-    return newPrize;
+    return {
+      newPrize, 
+      precioEnDolares
+    };
   }
 }
 
@@ -43,13 +49,14 @@ class Table {
 }
 
 class makeWeb {
-  constructor(tipo, anio, monto) {
+  constructor(tipo, anio, monto, dolares) {
     this.tipo = tipo;
     this.anio = anio;
-    this.monto = monto;
+    this.monto = monto
+    this.dolares = dolares;
   }
 
-  construyeWeb(tipo, anio, monto) {
+  construyeWeb(tipo, anio, monto, dolares) {
     const pantalla = document.getElementById("items");
     
     let itemAMostrar = document.createElement("div");
@@ -58,12 +65,14 @@ class makeWeb {
                 <li> Objeto: ${tipo} </li>
                 <li> Año de compra: ${anio} </li>
                 <li> Monto a pagar: ${monto} </li>
+                <li> Monto en U$S: ${dolares} </li>
             `;
     pantalla.appendChild(itemAMostrar);
     $("#items").hide().fadeIn(1000).fadeOut(1000).fadeIn(1000);
   }
 }
 // Aca comienzan las funciones
+
 function crearTabla(){
         // Elimino cualquier resultado anterior
         const datosViejos = document.querySelector("#historia table")
@@ -105,6 +114,16 @@ function aplicaDto(precio, time, dto) {
   return precio;
 }
 
+
+function cotizaDolar() {
+  const URLGET = "https://apiarg.herokuapp.com/api/dolaroficial"
+
+  $.get(URLGET, function (respuesta, estado) {
+    if (estado === "success") {
+      dolarhoy = respuesta.venta;
+    }
+  })
+}
 
 // parseo del formulario
 const formulario = document.getElementById("formularioCotiza");
@@ -152,10 +171,11 @@ formulario.addEventListener("submit", (e) => {
 
   // Instanciamos la cotizacion
   const agregoCotizacion = new Cotizar(tipoElegido, anioElegido);
-  const precio = agregoCotizacion.cotizaTipo();
+  const precio = agregoCotizacion.cotizaTipo().newPrize;
+  const dolar = agregoCotizacion.cotizaTipo().precioEnDolares;
 
   // Armo el contenido de la tabla y lo subo al array
-  cotizacion.push(new Table(textoElegido, anioElegido, precio));
+  cotizacion.push(new Table(textoElegido, anioElegido, precio, dolar));
 
   // Cargo el array en localStorage
   const guardarLocal = (clave, valor) => { localStorage.setItem(clave, valor) };
@@ -163,7 +183,7 @@ formulario.addEventListener("submit", (e) => {
 
   // Inicializo y armo la web
   const web = new makeWeb();
-  web.construyeWeb(textoElegido, anioElegido, precio);
+  web.construyeWeb(textoElegido, anioElegido, precio, dolar);
     }
   // Reinicio el formulario y lo dejo listo para seleccionar otro valor
     formulario.reset();
