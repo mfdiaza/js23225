@@ -118,21 +118,36 @@ function aplicaDto(precio, time, dto) {
 function cotizaDolar() {
   const URLGET = "https://apiarg.herokuapp.com/api/dolaroficial"
 
-  $.get(URLGET, function (respuesta, estado) {
-    if (estado === "success") {
-      dolarhoy = respuesta.venta;
+      // show spinner
+      $('#spinner').show();
+      $.ajax({
+          url: URLGET,
+          type: 'get',
+          contentType: "application/json",
+          success: function (resp) {
+              $('#spinner').append(resp.venta);
+              dolarhoy = respuesta.venta;
+          },
+          error: function () {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'No se pudo obtener la cotizacion del dolar',
+            })
+            dolarhoy = 1;
+          }
+      }).done(function () {
+          // hide spinner
+          $('#spinner').hide();
+      });
     }
-  })
-}
+//   $.get(URLGET, function (respuesta, estado) {
+//     if (estado === "success") {
+//       dolarhoy = respuesta.venta;
+//     }
+//   })
+// }
 
-$(document).on({
-  ajaxStart: function(){
-      $("body").addClass("loading"); 
-  },
-  ajaxStop: function(){ 
-      $("body").removeClass("loading"); 
-  }    
-});
 
 // parseo del formulario
 const formulario = document.getElementById("formularioCotiza");
