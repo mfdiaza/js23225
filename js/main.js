@@ -61,14 +61,26 @@ class makeWeb {
     
     let itemAMostrar = document.createElement("div");
     itemAMostrar.classList.add("list-group-item", "text-right", "mx-2");
+    if (dolares == monto) {
     itemAMostrar.innerHTML = `            
                 <li> Objeto: ${tipo} </li>
                 <li> Año de compra: ${anio} </li>
                 <li> Monto a pagar: ${monto} </li>
-                <li> Monto en U$S: ${dolares} </li>
+                <li> Monto en U$S: No se pudo obtener la cotización del dolar, intente mas tarde </li>
             `;
     pantalla.appendChild(itemAMostrar);
     $("#items").hide().fadeIn(1000).fadeOut(1000).fadeIn(1000);
+    }
+    else {
+      itemAMostrar.innerHTML = `            
+      <li> Objeto: ${tipo} </li>
+      <li> Año de compra: ${anio} </li>
+      <li> Monto a pagar: ${monto} </li>
+      <li> Monto en U$S: ${dolares} </li>
+  `;
+pantalla.appendChild(itemAMostrar);
+$("#items").hide().fadeIn(1000).fadeOut(1000).fadeIn(1000);
+    }
   }
 }
 // Aca comienzan las funciones
@@ -126,7 +138,7 @@ function cotizaDolar() {
           contentType: "application/json",
           success: function (resp) {
               $('#spinner').append(resp.venta);
-              dolarhoy = respuesta.venta;
+              dolarhoy = resp.venta;
           },
           error: function () {
             Swal.fire({
@@ -135,6 +147,7 @@ function cotizaDolar() {
               text: 'No se pudo obtener la cotizacion del dolar',
             })
             dolarhoy = 1;
+            $('#spinner').hide();
           }
       }).done(function () {
           // hide spinner
@@ -194,6 +207,7 @@ formulario.addEventListener("submit", (e) => {
     }
 
   // Instanciamos la cotizacion
+
   const agregoCotizacion = new Cotizar(tipoElegido, anioElegido);
   const precio = agregoCotizacion.cotizaTipo().newPrize;
   const dolar = agregoCotizacion.cotizaTipo().precioEnDolares;
