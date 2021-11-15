@@ -113,7 +113,7 @@ function crearTabla(){
         table.appendChild(row);
     });
     tabla.append(table);
-    $("#historia").hide().fadeIn(1000).fadeOut(1000).fadeIn(1000);
+    $("#historia").hide().fadeIn(2000).fadeOut(2000).fadeIn(2000);
 }
 
 function aplicaBono(precio, time, bono) {
