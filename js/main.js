@@ -69,7 +69,7 @@ class makeWeb {
                 <li> Monto en U$S: No se pudo obtener la cotización del dolar, intente mas tarde </li>
             `;
     pantalla.appendChild(itemAMostrar);
-    $("#items").hide().fadeIn(1000).fadeOut(1000).fadeIn(1000);
+    $("#items").hide().fadeIn(2000).fadeOut(2000).fadeIn(2000);
     }
     else {
       itemAMostrar.innerHTML = `            
@@ -79,7 +79,7 @@ class makeWeb {
       <li> Monto en U$S: ${dolares} </li>
   `;
 pantalla.appendChild(itemAMostrar);
-$("#items").hide().fadeIn(1000).fadeOut(1000).fadeIn(1000);
+$("#items").hide().fadeIn(2000).fadeOut(2000).fadeIn(2000);
     }
   }
 }
@@ -154,13 +154,6 @@ function cotizaDolar() {
           $('#spinner').hide();
       });
     }
-//   $.get(URLGET, function (respuesta, estado) {
-//     if (estado === "success") {
-//       dolarhoy = respuesta.venta;
-//     }
-//   })
-// }
-
 
 // parseo del formulario
 const formulario = document.getElementById("formularioCotiza");
