@@ -13,10 +13,12 @@ class Cotizar {
     this.age = age;
   }
 
+  // El metodo que cotiza segun el tipo de producto
+
   cotizaTipo() {
     let newPrize;
-    let precioBaseOro = 50000;
-    let precioBaseAuto = 236000;
+    let precioBaseOro = 50000; // Defino un precio base para el oro 
+    let precioBaseAuto = 236000; // Defino un precio base para el auto
     let dtoTV = 0;
     let old = new Date().getFullYear() - this.age;
     let precioEnDolares;
@@ -85,6 +87,8 @@ $("#items").hide().fadeIn(2000).fadeOut(2000).fadeIn(2000);
 }
 // Aca comienzan las funciones
 
+// La siguiente funcion arma la talba de las cotizaciones historicas (Solo en pesos=)
+
 function crearTabla(){
         // Elimino cualquier resultado anterior
         const datosViejos = document.querySelector("#historia table")
@@ -113,34 +117,37 @@ function crearTabla(){
         table.appendChild(row);
     });
     tabla.append(table);
-    $("#historia").hide().fadeIn(2000).fadeOut(2000).fadeIn(2000);
+    $("#historia").hide().fadeIn(2000).fadeOut(2000).fadeIn(2000); // Algunos efectos basicos de presentacion
 }
 
+// Calculo del bono
 function aplicaBono(precio, time, bono) {
   precio = precio + (time * bono * precio) / 100;
   return precio;
 }
+
+// Calculo del descuento
 
 function aplicaDto(precio, time, dto) {
   precio = (time * dto * precio) / 100;
   return precio;
 }
 
-
+// Levanto la cotizacion del dolar
 function cotizaDolar() {
   const URLGET = "https://apiarg.herokuapp.com/api/dolaroficial"
 
-      // show spinner
+      // Muestro un spinner hasta obtener una respuesta
       $('#spinner').show();
       $.ajax({
           url: URLGET,
           type: 'get',
           contentType: "application/json",
-          success: function (resp) {
+          success: function (resp) { // Si la rta. fue satisfactoria, me quedo con el valor de venta.
               $('#spinner').append(resp.venta);
               dolarhoy = resp.venta;
           },
-          error: function () {
+          error: function () { // Si la rta. no fue satisfactoria, presento un modal usando la libreria SweetAlert
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
@@ -171,11 +178,11 @@ formulario.addEventListener("submit", (e) => {
   let maxAge = currentYear - anioElegido
 
   // Algunas validaciones
-    if (anioElegido === '' || anioElegido > currentYear) {
+    if (anioElegido === '' || anioElegido > currentYear || (/\D/.test(anioElegido)) ) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Año vacío o invalido!',
+        text: 'Año vacío, futuro o invalido!',
       })
     } 
     else if (tipoElegido == 1 && (maxAge > 20)) {
